@@ -1,0 +1,165 @@
+{% extends "layout.html" %}
+{% set footer = true %}
+{% block content %}
+
+<!-- Setting the special style-->
+<style>
+    .forms {
+      background-color: #305178 !important   ;
+      color:white !important
+    }
+  </style>
+<div class="container-fluid forms" >
+
+    
+<!-- If there is any errors -->
+    <div class="container-fluid">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{category}} alert-dismissible fade show shadow-sm rounded" role="alert" style="color: black"> <!-- Customize colors as needed -->
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <!--Setting the iamge at the top-->
+    <div class="row">
+        <div class="col-12">
+
+            <div style="background-image: url('{{ url_for('static', filename='images/images.jpg') }}'); height: 300px; background-size: cover; background-position: center; position: relative ; border-radius:20px; box-shadow: 20px 0 10px gray;margin-top:10px">
+                <legend class="mb-4" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; text-align: center;">
+                    {{ title }}
+                </legend>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-8">
+
+            <!--Create the form here-->
+            <form name="Predict" action="/predict" method="post" novalidate>
+                {{ form.hidden_tag() }}
+
+                <div class="row g-3">
+
+                    <!--Create the differnet fields here -->
+                    {% for field in form %}
+                        {% if field.name !='submit' and field.name !='csrf_token' %}
+                            <div class="col-md-6">
+                                <div class="form-group">
+
+                                    <!--Adding the sldiers here-->
+                                    {% if field.name == 'year' %}
+                                        <label for="yearRange">{{ field.label.text }}</label>
+                                        <input type="range" class="form-range" id="yearRange" name="year" min="1969" max="{{ current_year }}" value="{{ form.year.data or '2010' }}" oninput="yearOutputId.value = yearRange.value">
+                                        <output id="yearOutputId">{{ form.year.data or '2010' }}</output>
+                                    {% elif field.name == 'mileage' %}
+                                        <label for="mRange">{{ field.label.text }}</label>
+                                        <input type="range" class="form-range" id="mRange" name="mileage" min="0" max="40000" step="0.1" value="{{ form.mileage.data or 0 }}" oninput="mOutPutID.value = mRange.value">
+                                        <output id="mOutPutID">{{ form.mileage.data or '20000' }}</output>
+                                    {% elif field.name == 'engine_size' %}
+                                        <label for="eRange">{{ field.label.text }}</label>
+                                        <input type="range" class="form-range" id="eRange" name="engine_size" min="0" max="390" value="{{ form.engine_size.data or 0 }}" oninput="eOutPutID.value = eRange.value">
+                                        <output id="eOutPutID">{{ form.engine_size.data or '200' }}</output>
+                                    {% elif field.name == 'min_mpg' %}
+                                        <label for="sRange">{{ field.label.text }}</label>
+                                        <input type="range" class="form-range" id="sRange" name="min_mpg" min="0" max="89" value="{{ form.min_mpg.data or 0 }}" oninput="sOutPutID.value = sRange.value">
+                                        <output id="sOutPutID">{{ form.min_mpg.data or '200' }}</output>
+                                    {% else %}
+
+                                    <!-- If brand model contains autocomplete-->
+                                        {% if field.name == 'brand' %}
+                                            {{ field.label(class_='form-label') }}
+                                        <input class="form-control" list="brand_list" name="brand">
+                                        <datalist id="brand_list">
+                                            {% for brand in brands %}
+                                            <option value="{{ brand }}">
+                                            {% endfor %}
+                                        </datalist>
+                                        {% else %}
+                                            {{ field.label(class_='form-label') }}
+                                            {{ field(class_='form-control') }}
+                                        {% endif %}
+                                    {% endif %}
+
+                                    <!--IF there is any error-->
+                                    {% if field.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ field.errors[0] }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                    <div class="col-12 d-flex justify-content-center mb-4">
+                        <button type="submit" class="btn btn-primary">{{ form.submit.label.text }}</button>
+                    </div>
+                    
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--Setting the prediction results below-->
+{% if prediction is not none %}
+    <div class="container mt-4" style='background-color: #90EE90 !important'>
+        <div class="card" style='background-color: #90EE90 !important'>
+            <div class="card-body" style='background-color: #90EE90 !important'>
+                <h3 class="card-title">Prediction Result: ${{ prediction }}</h3>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row mt-3">
+        {% for image in images %}
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <img src="{{ image.urls.regular }}" class="card-img-top" alt="{{ image.alt_description }}">
+                    <div class="card-body">
+                        <p class="card-text">Some additional information about the car could go here.</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+<!-- Setting the script for javascript-->
+<script type="text/javascript">
+    var yearRange = document.getElementById('yearRange');
+    var yearOutput = document.getElementById('yearOutputId');
+    yearOutput.value = yearRange.value;
+    yearRange.oninput = function () {
+        yearOutput.value = this.value;
+    };
+
+
+    var mRange = document.getElementById('mRange');
+    var mOutput = document.getElementById('mOutPutID');
+    mOutput.value = mRange.value;
+    mRange.oninput = function () {
+        mOutput.value = this.value;
+    };
+
+    var eRange = document.getElementById('eRange');
+    var eOutput = document.getElementById('eOutPutID');
+    eOutput.value = eRange.value;
+    eRange.oninput = function () {
+        eOutput.value = this.value;
+    };
+
+    var sRange = document.getElementById('sRange');
+    var sOutput = document.getElementById('sOutPutID');
+    sOutput.value = sRange.value;
+    sRange.oninput = function () {
+        sOutput.value = this.value;
+    };
+</script>
+
+{% endblock %}

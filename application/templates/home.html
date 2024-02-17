@@ -1,0 +1,81 @@
+{% extends "layout.html" %}
+{% set footer = true %}
+{% block content %}
+
+<!--Setting the special style for this page-->
+<style>
+    .infos {
+      background-color: #305178   ;
+    }
+</style>
+
+<body class='body1'>
+
+  <!--Setting the carousell for the home page-->
+    <div id="welcomeCarousel" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <div class="text-overlay">
+              <h1>Welcome to CarPrice 1.0</h1>
+              <p>Best Car Prediction</p>
+            </div>
+            <img class="d-block w-100 img-fluid" src="{{ url_for('static', filename='images/images.jpg') }}" alt="First slide">
+          </div>
+          <div class="carousel-item">
+            <div class="text-overlay">
+                <h1>Welcome to CarPrice 1.0</h1>
+                <p>Best Car Prediction</p>
+            </div>
+            <img class="d-block w-100 img-fluid image2" src="{{ url_for('static', filename='images/images2.jpg') }}" alt="Second slide">
+          </div>
+        </div>
+        <a class="carousel-control-prev" href="#welcomeCarousel" role="button" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#welcomeCarousel" role="button" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
+      </div>
+    <div class='infos'>
+    
+      <!-- Setting the info on us and our model-->
+    <section id="about" class="container ">
+        <div class="row">
+            <div class="col-md-6 text1">
+                <h2 >About Us</h2>
+              
+            </div>
+            <div class="container my-5 about">
+                <div class="decorative-card">
+                    <div class="card-body">
+                        <p>Thank you for visiting our webpage, our goal is to provide the most accurate predictions for car with many different features provided for you to choose. We hope that you will like it and if you face any issues, please contact us with the contact below</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="technology" class="container ">
+        <div class="row">
+            <div class="col-md-6 text1">
+                <h2>Our Model</h2>
+
+            </div>
+            <div class="container my-5">
+                <div class="decorative-card">
+                    <div class="card-body">
+                        <ul>
+                            <li>Utilization of an advanced model</li>
+                            <li>Based on the state-of-the-art <b>CatBoost<b> model</li>
+                            <li>Model accuracy of 91%</li>
+                          </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% set footer = true %}
+{% block content %}
+
+<div class="container mt-5">
+    <!-- Make the card wider by not setting the width and adding 'card-deck' class -->
+    <div class="card card-deck">
+        <div class="card-body">
+            <h5 class="card-title">{{ user.username }}'s Profile</h5>
+            <h6 class="card-subtitle mb-2 text-muted">User Details</h6>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Username: {{ user.username }}</li>
+                <li class="list-group-item">Email: {{ user.email }}</li>
+                <!-- Remove displaying password hash for security reasons -->
+            </ul>
+            <!-- Change password button -->
+            <a href="{{ url_for('change_password', username=user.username) }}" class="btn btn-warning mt-3">Change Password</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

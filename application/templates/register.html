@@ -1,0 +1,81 @@
+{% extends "layout.html" %}
+{% set footer = false %}
+{% block content %}
+
+
+<!--Setting the special style for Register-->
+<style>
+    .registers {
+      background-color: #305178   ;
+    }
+</style>
+<div class="min-vh-100 d-flex align-items-center justify-content-center registers" >
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-5 bg-dark">
+                <div class="card shadow border-0 rounded-lg">
+                    <div class="card-header bg-dark">
+                        <h3 class="text-center font-weight-light my-4 text-light">Sign Up</h3>
+                    </div>
+                    
+                    <!--If there is any error during register-->
+                    <div class="card-body bg-dark">
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                        {% for category, message in messages %}
+                        <div class="alert alert-{{category}} alert-dismissible fade show" role="alert" style="color: red">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                        {% endwith %}
+
+                        <!--Create the register form here-->
+                        <form action="/register" method="post" novalidate>
+                            {{ form.csrf_token }}
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="{{ form.username.id }}" placeholder="Username" name="{{ form.username.name }}" >
+                                <label for="{{ form.username.id }}" >{{ form.username.label.text }}</label>
+                                {% for error in form.username.errors %}
+                                <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="email" class="form-control" id="{{ form.email.id }}" placeholder="name@example.com" name="{{ form.email.name }}" >
+                                <label for="{{ form.email.id }}" >{{ form.email.label.text }}</label>
+                                {% for error in form.email.errors %}
+                                <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="password" class="form-control" id="{{ form.password_1.id }}" placeholder="Password" name="{{ form.password_1.name }}" >
+                                <label for="{{ form.password_1.id }}" >{{ form.password_1.label.text }}</label>
+                                {% for error in form.password_1.errors %}
+                                <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="password" class="form-control" id="{{ form.password.id }}" placeholder="Confirm Password" name="{{ form.password.name }}" >
+                                <label for="{{ form.password.id }}" >{{ form.password.label.text }}</label>
+                                {% for error in form.password.errors %}
+                                <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
+                                <button class="btn btn-outline-light" type="submit">Register</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!--Direct to login page if account have already-->
+                    <div class="card-footer bg-dark text-muted">
+                        <div class="text-center my-3" style="color:lightgray">Already have an account? <a href="/login" class="text-primary">Login</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

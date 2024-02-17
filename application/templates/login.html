@@ -1,0 +1,70 @@
+{% extends "layout.html" %}
+{% set footer = false %}
+{% block content %}
+
+<!--Setting the special style for login-->
+<style>
+    .logins {
+      background-color: #305178  !important ;
+    }
+</style>
+<div class="min-vh-100 d-flex align-items-center justify-content-center logins ">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6 col-xl-5 rounded">
+                <div class="card text-white bg-dark mb-0 shadow-lg p-3 mb-5 rounded">
+                    <div class="card-header text-center py-3">
+                        <h3 class="font-weight-light mb-0">Login to Your Account</h3>
+                    </div>
+
+                    <!--If there is any error during login-->
+                    <div class="card-body">
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                            <div class="alert alert-{{category}} alert-dismissible fade show shadow-sm rounded" role="alert" style="color: black"> 
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                            {% endfor %}
+                        {% endif %}
+                        {% endwith %}
+
+                        <!--Create the login form here-->
+                        <form action="/login" method="post" novalidate>
+                            {{ form.csrf_token }}
+
+                            <!--Setting the different fields here-->
+                            <div class="form-floating mb-3">
+                                <input type="email" class="form-control bg-dark text-white" id="{{ form.email.id }}" placeholder="name@gmail.com" name="{{ form.email.name }}">
+                                <label for="{{ form.email.id }}">{{ form.email.label.text }}</label>
+                                {% for error in form.email.errors %}
+                                <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="password" class="form-control bg-dark text-white" id="{{ form.password.id }}" placeholder="Password" name="{{ form.password.name }}">
+                                <label for="{{ form.password.id }}">{{ form.password.label.text }}</label>
+                                {% for error in form.password.errors %}
+                                <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
+                                <a class="small text-muted" href="/reset_password">Forgot Password?</a>
+                                <button class="btn btn-primary" type="submit">Login</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!--If sign up is required-->
+                    <div class="card-footer text-center py-3">
+                        <div class="small"><a href="/register">Need an account? Sign up!</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
